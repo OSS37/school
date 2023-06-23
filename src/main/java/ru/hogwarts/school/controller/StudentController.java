@@ -1,14 +1,16 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
 
     private final StudentService studentService;
@@ -17,7 +19,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("{id}") // GET http://localhost:8888/student/25
+    @GetMapping("/{id}") // GET http://localhost:8888/student/25
     public ResponseEntity<Student> getStudentInfo (@PathVariable Long id) {
         Student student = studentService.findStudent(id);
         if (student == null) {
@@ -35,18 +37,22 @@ public class StudentController {
     public ResponseEntity <Student> editStudent (@RequestBody Student student) {
         Student student1 = studentService.editStudent(student);
         if (student1 == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.ok(student1);
     }
 
-    @DeleteMapping("{id}") // DELETE http://localhost:8888/student/25
-    public Student deleteStudentInfo (@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+    @DeleteMapping("/{id}") // DELETE http://localhost:8888/student/25
+    public ResponseEntity deleteStudentInfo (@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{age}") // GET http://localhost:8888/student/19
-    public List<Student> FiltrStudentAge (@PathVariable int age) {
-        return studentService.filterStudentsAge(age);
+    @GetMapping // GET http://localhost:8888/student?age=19
+    public ResponseEntity <List<Student>> FiltrStudentAge (@RequestParam (required = false) int age) {
+        if (age > 0) {
+            return ResponseEntity.ok(studentService.filterStudentsAge(age));
+        }
+        return ResponseEntity.ok(Collections.emptyList());
     }
 }
