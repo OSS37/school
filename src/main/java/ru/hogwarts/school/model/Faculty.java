@@ -1,21 +1,29 @@
 package ru.hogwarts.school.model;
 
-import java.util.Objects;
+import org.springframework.data.annotation.Id;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import java.util.Objects;
+@Entity
 public class Faculty {
+    @javax.persistence.Id
+    @GeneratedValue
+    @Id
     private Long id;
     private String name;
     private String color;
 
     public Faculty(Long id, String name, String color) {
-        id = ++id;
+        this.id = id;
         this.name = name;
         this.color = color;
     }
 
-    public Long getId() {
-        return id;
+    public Faculty() {
+
     }
+
 
     public String getName() {
         return name;
@@ -23,10 +31,6 @@ public class Faculty {
 
     public String getColor() {
         return color;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -57,5 +61,13 @@ public class Faculty {
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

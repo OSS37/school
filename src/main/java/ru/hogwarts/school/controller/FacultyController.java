@@ -7,10 +7,11 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping ("faculty")
+@RequestMapping ("/faculty")
 public class FacultyController {
     private final FacultyService facultyService;
 
@@ -33,17 +34,18 @@ public class FacultyController {
     }
 
     @PutMapping //PUT http://localhost:8888/faculty
-    public Faculty editFaculty (@RequestBody Faculty faculty) {
+    public  Faculty editFaculty (@RequestBody Faculty faculty) {
         return facultyService.editFaculty(faculty);
     }
 
     @DeleteMapping("{id}") // DELETE http://localhost:8888/faculty/25
-    public Faculty deleteFaculty (@PathVariable Long id) {
-        return facultyService.deleteFaculty(id);
+    public ResponseEntity deleteFaculty (@PathVariable Long id) {
+        facultyService.deleteFaculty(id);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{color}") // GET http://localhost:8888/faculty/25
-    public List<Faculty> getFacultyInfo (@PathVariable String color) {
-        return facultyService.filterFacultyColor(color);
+    @GetMapping // GET http://localhost:8888/faculty?color=green
+    public ResponseEntity <List<Faculty>> getFacultyInfo (@RequestParam (required = false) String color) {
+        return ResponseEntity.ok(facultyService.findByColor(color));
     }
 }
