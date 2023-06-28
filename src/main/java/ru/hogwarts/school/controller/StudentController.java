@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/{id}") // GET http://localhost:8888/student/25
+    @GetMapping("{id}") // GET http://localhost:8888/student/25
     public ResponseEntity<Student> getStudentInfo (@PathVariable Long id) {
         Student student = studentService.findStudent(id);
         if (student == null) {
@@ -49,7 +50,7 @@ public class StudentController {
     }
 
     @GetMapping // GET http://localhost:8888/student?age=19
-    public ResponseEntity <List<Student>> FiltrStudentAge (@RequestParam (required = false) int age) {
+    public ResponseEntity <Collection<Student>> FiltrStudentAge (@RequestParam (required = false) int age) {
         if (age > 0) {
             return ResponseEntity.ok(studentService.filterStudentsAge(age));
         }

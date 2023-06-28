@@ -21,7 +21,7 @@ public class StudentService {
     }
 
     public Student findStudent(Long id) {
-        return studentRepository.getById(id);
+        return studentRepository.findById(id).get();
     }
 
     public Student editStudent(Student student) {
@@ -32,7 +32,7 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public List <Student> filterStudentsAge(int age) {
+    public Collection <Student> filterStudentsAge(int age) {
         return studentRepository.findByAge(age);
     }
 
