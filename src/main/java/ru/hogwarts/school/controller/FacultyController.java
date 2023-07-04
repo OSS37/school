@@ -1,17 +1,18 @@
 package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.dto.FacultyDtoIn;
+import ru.hogwarts.school.dto.FacultyDtoOut;
+import ru.hogwarts.school.dto.StudentDtoOut;
 import ru.hogwarts.school.service.FacultyService;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping ("/faculty")
+@RequestMapping("/faculty")
 public class FacultyController {
     private final FacultyService facultyService;
 
@@ -19,33 +20,36 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
-    @GetMapping("{id}") // GET http://localhost:8888/faculty/25
-    public ResponseEntity<Faculty> getFacultyInfo (@PathVariable Long id) {
-        Faculty faculty = facultyService.findFaculty(id);
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+    @GetMapping("/{id}") // GET http://localhost:8888/faculty/25
+    public FacultyDtoOut findFaculty(@PathVariable("id") long id) {
+        return facultyService.findFaculty(id);
     }
 
     @PostMapping // POST http://localhost:8888/faculty
-    public Faculty createFaculty (@RequestBody Faculty faculty) {
-        return facultyService.createFaculty(faculty);
+    public FacultyDtoOut createFaculty(@RequestBody FacultyDtoIn facultyDtoIn) {
+        return facultyService.createFaculty(facultyDtoIn);
     }
 
-    @PutMapping //PUT http://localhost:8888/faculty
-    public  Faculty editFaculty (@RequestBody Faculty faculty) {
-        return facultyService.editFaculty(faculty);
+    @PutMapping("/{id}")//PUT http://localhost:8888/faculty
+    public FacultyDtoOut editFaculty(@PathVariable("id") long id,
+                                     @RequestBody FacultyDtoIn facultyDtoIn) {
+        return facultyService.editFaculty(id, facultyDtoIn);
     }
 
     @DeleteMapping("{id}") // DELETE http://localhost:8888/faculty/25
-    public ResponseEntity deleteFaculty (@PathVariable Long id) {
-        facultyService.deleteFaculty(id);
-        return ResponseEntity.ok().build();
+    public FacultyDtoOut deleteFaculty(@PathVariable("id") Long id) {
+        return facultyService.deleteFaculty(id);
     }
 
-    @GetMapping // GET http://localhost:8888/faculty?color=green
-    public ResponseEntity <List<Faculty>> getFacultyInfo (@RequestParam (required = false) String color) {
-        return ResponseEntity.ok(facultyService.findByColor(color));
+    @GetMapping("/filter") // GET http://localhost:8888/faculty?color=green
+    public List<FacultyDtoOut> findByColorOrName(@RequestParam String colorOrName) {
+        return facultyService.findByColorOrName(colorOrName);
+
+    }
+
+    @GetMapping("/{id}/students")
+    public List<StudentDtoOut> findStidentsOnFaculty(@PathVariable("id") Long id) {
+        return facultyService.findStudentsByFaculty(id);
+
     }
 }

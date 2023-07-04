@@ -1,18 +1,23 @@
-package ru.hogwarts.school.model;
+package ru.hogwarts.school.entity;
 
 import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 import java.util.Objects;
+
 @Entity
+@Table(name = "students")
 public class Student {
     @javax.persistence.Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     private String name;
-    private int age;
+    private Integer age;
+
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
 
     public Student(Long id, String name, int age) {
         this.id = id;
@@ -21,8 +26,8 @@ public class Student {
     }
 
     public Student() {
+            }
 
-    }
 
     public String getName() {
         return name;
@@ -62,11 +67,15 @@ public class Student {
                 '}';
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 }
