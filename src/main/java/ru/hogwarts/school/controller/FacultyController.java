@@ -21,7 +21,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}") // GET http://localhost:8888/faculty/25
-    public FacultyDtoOut findFaculty(@PathVariable("id") long id) {
+    public FacultyDtoOut findFaculty(@PathVariable long id) {
         return facultyService.findFaculty(id);
     }
 
@@ -31,13 +31,13 @@ public class FacultyController {
     }
 
     @PutMapping("/{id}")//PUT http://localhost:8888/faculty
-    public FacultyDtoOut editFaculty(@PathVariable("id") long id,
+    public FacultyDtoOut editFaculty(@PathVariable long id,
                                      @RequestBody FacultyDtoIn facultyDtoIn) {
         return facultyService.editFaculty(id, facultyDtoIn);
     }
 
-    @DeleteMapping("{id}") // DELETE http://localhost:8888/faculty/25
-    public FacultyDtoOut deleteFaculty(@PathVariable("id") Long id) {
+    @DeleteMapping("/{id}") // DELETE http://localhost:8888/faculty/25
+    public FacultyDtoOut deleteFaculty(@PathVariable Long id) {
         return facultyService.deleteFaculty(id);
     }
 
@@ -48,7 +48,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}/students")
-    public List<StudentDtoOut> findStidentsOnFaculty(@PathVariable("id") Long id) {
+    public List<StudentDtoOut> findStudentsOnFaculty(@PathVariable Long id) {
         return facultyService.findStudentsByFaculty(id);
 
     }

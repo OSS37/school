@@ -93,15 +93,16 @@ public class StudentService {
 
     }
 
-/*
+
     public StudentDtoOut uploadAvatar(Long id, MultipartFile multipartFile) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundExeption(id));
        Avatar avatar = avatarService.create(student, multipartFile);
+        StudentDtoOut studentDtoOut = studentMapper.toDto(student);
+        studentDtoOut.setAvatarUrl("http://localhost:8888/avatars/" + avatar.getId()+ "/from-db");
+        return studentDtoOut;
+
        }
-*/
-
-
 }
 
 

@@ -24,8 +24,8 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("{id}") // GET http://localhost:8888/student/25
-    public StudentDtoOut get (@PathVariable ("/{id}") long id) {
+    @GetMapping("/{id}") // GET http://localhost:8888/student/25
+    public StudentDtoOut get (@PathVariable long id) {
     return studentService.findStudent(id);
     }
 
@@ -62,13 +62,13 @@ public class StudentController {
         return studentService.findFaculty(id);
     }
 
-/*
+
     @PatchMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public StudentDtoOut uploadAvatar(@PathVariable("id") Long id,
                                       @RequestPart("avatar") MultipartFile multipartFile) {
         return studentService.uploadAvatar(id, multipartFile);
         }
-*/
+
 
 
 }
