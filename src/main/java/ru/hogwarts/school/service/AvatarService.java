@@ -23,7 +23,7 @@ public class AvatarService {
     private final Path pathToAvatarDir;
 
     public AvatarService(AvatarRepository avatarRepository,
-                         @Value("${path.to.avatar.dir") String pathToAvatarDir) {
+                         @Value("${path.to.avatar.dir}") String pathToAvatarDir) {
 
         this.avatarRepository = avatarRepository;
         this.pathToAvatarDir = Path.of(pathToAvatarDir);
@@ -61,8 +61,8 @@ public class AvatarService {
 
     public Pair <byte[], String> getFromFs(long id) {
         try {
-            Avatar avatar = avatarRepository.findById(id).
-                    orElseThrow(() -> new AvatarNotFoundExeption(id));
+            Avatar avatar = avatarRepository.findById(id)
+                    .orElseThrow(() -> new AvatarNotFoundExeption(id));
             return Pair.of(Files.readAllBytes(Path.of(avatar.getFilePath())), avatar.getMediaType());
         } catch (IOException e) {
             throw new AvatarProcessingException();
