@@ -13,6 +13,10 @@ public class StudentDtoIn {
         this.facultyId = facultyId;
     }
 
+    public StudentDtoIn() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
