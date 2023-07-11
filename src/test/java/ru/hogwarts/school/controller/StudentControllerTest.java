@@ -18,6 +18,8 @@ import ru.hogwarts.school.repository.StudentRepository;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 
+
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StudentControllerTest {
 
@@ -38,7 +40,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public StudentDtoOut createStudent() {
+    public StudentDtoOut  createStudent() {
         StudentDtoIn studentDtoIn = generate();
 
        ResponseEntity <StudentDtoOut> responseEntity = testRestTemplate.postForEntity (
@@ -54,6 +56,7 @@ public class StudentControllerTest {
         assertThat (studentDtoOut.getName()).isEqualTo(studentDtoIn.getName());
 
         return studentDtoOut;
+
     }
 
 
@@ -64,26 +67,26 @@ public class StudentControllerTest {
         return studentDtoIn;
     }
 
-    @Test
+@Test
     public void editStudentTest() {
-        StudentDtoOut created = createStudent();
-        StudentDtoIn studentDtoIn = new StudentDtoIn();
-        studentDtoIn.setName(faker.name().fullName());
-        studentDtoIn.setAge(created.getAge());
+    StudentDtoOut created = createStudent();
+    StudentDtoIn studentDtoIn = new StudentDtoIn();
+    studentDtoIn.setName(faker.name().fullName());
+    studentDtoIn.setAge(created.getAge());
 
-        ResponseEntity <StudentDtoOut> responseEntity = testRestTemplate.exchange (
-                "http://localhost:" + port + "/student/" + created.getId(),
-                HttpMethod.PUT,
-                new HttpEntity<>(studentDtoIn),
-                StudentDtoOut.class
-        );
-        assertThat (responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        StudentDtoOut studentDtoOut = responseEntity.getBody();
+    ResponseEntity<StudentDtoOut> responseEntity = testRestTemplate.exchange(
+            "http://localhost:" + port + "/student/" + created.getId(),
+            HttpMethod.PUT,
+            new HttpEntity<>(studentDtoIn),
+            StudentDtoOut.class
+    );
+    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    StudentDtoOut studentDtoOut = responseEntity.getBody();
 
-        assertThat(studentDtoOut.getId()).isEqualTo(created.getId());
-        assertThat (studentDtoOut.getAge()).isEqualTo(studentDtoIn.getAge());
-        assertThat (studentDtoOut.getName()).isEqualTo(studentDtoIn.getName());
-    }
+    assertThat(studentDtoOut.getId()).isEqualTo(created.getId());
+    assertThat(studentDtoOut.getAge()).isEqualTo(studentDtoIn.getAge());
+    assertThat(studentDtoOut.getName()).isEqualTo(studentDtoIn.getName());
+}
 
 
 
