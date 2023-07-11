@@ -34,7 +34,7 @@ public class Avatar {
         this.filePath = filePath;
     }
 
-    public long getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 

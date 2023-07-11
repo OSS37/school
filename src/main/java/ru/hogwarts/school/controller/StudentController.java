@@ -25,8 +25,8 @@ public class StudentController {
     }
 
     @GetMapping("/{id}") // GET http://localhost:8888/student/25
-    public StudentDtoOut get (@PathVariable long id) {
-    return studentService.findStudent(id);
+    public StudentDtoOut get(@PathVariable long id) {
+        return studentService.findStudent(id);
     }
 
     @PostMapping // POST http://localhost:8888/student
@@ -35,9 +35,9 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")//PUT http://localhost:8888/student
-    public StudentDtoOut editStudent (@PathVariable ("id") long id,
-                                      @RequestBody StudentDtoIn studentDtoIn) {
-    return studentService.editStudent(id, studentDtoIn);
+    public StudentDtoOut editStudent(@PathVariable("id") long id,
+                                     @RequestBody StudentDtoIn studentDtoIn) {
+        return studentService.editStudent(id, studentDtoIn);
 
     }
 
@@ -47,13 +47,13 @@ public class StudentController {
     }
 
     @GetMapping // GET http://localhost:8888/student?age=19
-    public List<StudentDtoOut> findAll(@RequestParam (required = false) Integer age) {
+    public List<StudentDtoOut> findAll(@RequestParam(required = false) Integer age) {
         return studentService.findAll(age);
     }
 
     @GetMapping("/filter") // GET http://localhost:8888/student?minAge=19&maxAge=40
-    public List<StudentDtoOut> findByAgeBetween (@RequestParam Integer ageMin,
-                                                 @RequestParam Integer ageMax) {
+    public List<StudentDtoOut> findByAgeBetween(@RequestParam Integer ageMin,
+                                                @RequestParam Integer ageMax) {
         return studentService.findByAgeBetween(ageMin, ageMax);
     }
 
@@ -67,8 +67,23 @@ public class StudentController {
     public StudentDtoOut uploadAvatar(@PathVariable("id") Long id,
                                       @RequestPart("avatar") MultipartFile multipartFile) {
         return studentService.uploadAvatar(id, multipartFile);
-        }
+    }
 
+    @GetMapping("/count")
+    public int getAmoutOfStudents() {
+        return studentService.getAmoutOfStudents();
+    }
+
+    @GetMapping("/averageAge")
+    public double getAverageAge() {
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping("/getLastStudents")
+    public List<StudentDtoOut> getLastStudents(@RequestParam(value = "count", required = false,  defaultValue = "5") int count) {
+
+        return studentService.getLastStudents(Math.abs(count));
+    }
 
 
 }

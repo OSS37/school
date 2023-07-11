@@ -1,7 +1,9 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.dto.FacultyDtoIn;
 import ru.hogwarts.school.dto.FacultyDtoOut;
@@ -28,7 +30,7 @@ public class StudentService {
     private final FacultyMapper facultyMapper;
     private final AvatarService avatarService;
 
-    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper,FacultyRepository facultyRepository,FacultyMapper facultyMapper,AvatarService avatarService) {
+    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, FacultyRepository facultyRepository, FacultyMapper facultyMapper, AvatarService avatarService) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
         this.facultyRepository = facultyRepository;
@@ -56,7 +58,7 @@ public class StudentService {
                     Optional.ofNullable(studentDtoIn.getFacultyId())
                             .ifPresent(facultyId ->
                                     oldStudent.setFaculty(facultyRepository.findById(facultyId)
-                                            .orElseThrow(()-> new FacultyNotFoundException(facultyId))));
+                                            .orElseThrow(() -> new FacultyNotFoundException(facultyId))));
                     return studentMapper.toDto(studentRepository.save(oldStudent));
                 })
                 .orElseThrow(() -> new StudentNotFoundExeption(id));
@@ -78,7 +80,6 @@ public class StudentService {
     }
 
 
-
     public List<StudentDtoOut> findByAgeBetween(int ageMin, int ageMax) {
         return studentRepository.findByAgeBetween(ageMin, ageMax).stream()
                 .map(studentMapper::toDto)
@@ -94,15 +95,32 @@ public class StudentService {
     }
 
 
-    public StudentDtoOut uploadAvatar(Long id, MultipartFile multipartFile) {
+    public StudentDtoOut uploadAvatar(long id, MultipartFile multipartFile) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundExeption(id));
-       Avatar avatar = avatarService.create(student, multipartFile);
-        StudentDtoOut studentDtoOut = studentMapper.toDto(student);
-        studentDtoOut.setAvatarUrl("http://localhost:8888/avatars/" + avatar.getId()+ "/from-db");
-        return studentDtoOut;
+        avatarService.create(student, multipartFile);
+        return studentMapper.toDto(student);
 
-       }
+    }
+
+    public int getAmoutOfStudents() {
+        return studentRepository.getAmoutOfStudents();
+    }
+
+    public double getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
+    @Transactional(readOnly = true)
+        public List<StudentDtoOut> getLastStudents(int count) {
+            return studentRepository.getLastStudents(Pageable.ofSize(count)).stream()
+                    .map(studentMapper :: toDto)
+                    .collect(Collectors.toList());
+
+    }
 }
+
+
+
 
 
