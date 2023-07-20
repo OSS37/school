@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
@@ -24,6 +26,9 @@ import java.util.stream.Collectors;
 @Service
 public class AvatarService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AvatarService.class);
+
+
     private final AvatarRepository avatarRepository;
     private final Path pathToAvatarDir;
     private  final AvatarMapper avatarMapper;
@@ -37,6 +42,9 @@ public class AvatarService {
     }
 
    public Avatar create(Student student, MultipartFile multipartFile) {
+
+       LOG.info("Was invoked method create");
+
         try {
             String contentType = multipartFile.getContentType();
             String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
@@ -62,11 +70,13 @@ public class AvatarService {
    }
 
    public Pair <byte[], String> getFromDb(long id) {
+       LOG.info("Was invoked method getFromDb");
         Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new AvatarNotFoundExeption(id));
         return Pair.of(avatar.getData(), avatar.getMediaType());
    }
 
     public Pair <byte[], String> getFromFs(long id) {
+        LOG.info("Was invoked method getFromFs");
         try {
             Avatar avatar = avatarRepository.findById(id)
                     .orElseThrow(() -> new AvatarNotFoundExeption(id));
@@ -77,8 +87,8 @@ public class AvatarService {
 
     }
 
-
     public List<AvatarDto> getPage(int page, int size) {
+        LOG.info("Was invoked method getPage");
         return avatarRepository.findAll(PageRequest.of(page, size)).stream()
                 .map(avatarMapper :: toDto)
                 .collect(Collectors.toList());
