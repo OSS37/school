@@ -7,12 +7,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.school.dto.FacultyDtoIn;
 import ru.hogwarts.school.dto.FacultyDtoOut;
 import ru.hogwarts.school.dto.StudentDtoIn;
 import ru.hogwarts.school.dto.StudentDtoOut;
-import ru.hogwarts.school.entity.Avatar;
-import ru.hogwarts.school.entity.Faculty;
 import ru.hogwarts.school.exeption.FacultyNotFoundException;
 import ru.hogwarts.school.mapper.FacultyMapper;
 import ru.hogwarts.school.mapper.StudentMapper;
@@ -131,6 +128,25 @@ public class StudentService {
             return studentRepository.getLastStudents(Pageable.ofSize(count)).stream()
                     .map(studentMapper :: toDto)
                     .collect(Collectors.toList());
+    }
+
+
+    public List<String> getNamesStartWithA() {
+        return studentRepository.findAll().stream()
+                .map(student -> student.getName().toUpperCase())
+                .filter(name -> name.startsWith("А"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public double getAvgAge() {
+        return studentRepository.findAll().stream()
+                .mapToDouble(student -> student.getAge())
+                .average()
+                .getAsDouble();
+
+
+
 
     }
 }
