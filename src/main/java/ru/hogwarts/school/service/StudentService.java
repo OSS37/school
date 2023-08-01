@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import liquibase.pro.packaged.S;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,8 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+
 
 @Service
 public class StudentService {
@@ -144,9 +147,53 @@ public class StudentService {
                 .mapToDouble(student -> student.getAge())
                 .average()
                 .getAsDouble();
+    }
 
+    public void thread1() {
+        List <Student> students = studentRepository.findAll();
+        printStudent(students.get(0));
+        printStudent(students.get(1));
 
+        new Thread(()-> {
+            printStudent(students.get(2));
+            printStudent(students.get(3));
+        }).start();
 
+        new Thread(()-> {
+            printStudent(students.get(4));
+            printStudent(students.get(5));
+        }).start();
+    }
+
+    private void printStudent(Student student) {
+        try {
+            Thread.sleep(1000);
+            LOG.info(student.toString());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void thread2() {
+        List <Student> students = studentRepository.findAll();
+        LOG.info(students.toString());
+
+        printStudentSync(students.get(0));
+        printStudentSync(students.get(1));
+
+        new Thread(()-> {
+            printStudentSync(students.get(2));
+            printStudentSync(students.get(3));
+        }).start();
+
+        new Thread(()-> {
+            printStudentSync(students.get(4));
+            printStudentSync(students.get(5));
+        }).start();
+    }
+
+    private synchronized void printStudentSync(Student student) {
+        printStudent(student);
 
     }
 }

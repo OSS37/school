@@ -95,7 +95,15 @@ public class StudentController {
         return studentService.getAvgAge();
     }
 
+    @GetMapping("/thread1")
+    public void thread1() {
+        studentService.thread1();
+    }
 
+    @GetMapping("/thread2")
+    public void thread2() {
+        studentService.thread2();
+    }
 
 
 
