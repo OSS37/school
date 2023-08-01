@@ -6,6 +6,9 @@ public class FacultyDtoOut {
     private String name;
     private String color;
 
+    public FacultyDtoOut(Long facultyId, String facultyName, String facultyColor) {
+    }
+
     public Long getId() {
         return id;
     }

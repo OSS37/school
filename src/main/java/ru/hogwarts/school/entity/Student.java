@@ -8,12 +8,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "students")
 public class Student {
+
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    private long id;
     private String name;
     private Integer age;
+
+    @OneToOne(mappedBy = "student")
+    private Avatar avatar;
 
     @ManyToOne
     @JoinColumn(name = "faculty_id")
@@ -67,9 +71,6 @@ public class Student {
                 '}';
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public Faculty getFaculty() {
         return faculty;
@@ -77,5 +78,21 @@ public class Student {
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

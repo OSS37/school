@@ -16,6 +16,10 @@ public class Faculty {
     private String name;
     private String color;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @OneToMany (mappedBy = "faculty")
     private Collection<Student> students;
 
