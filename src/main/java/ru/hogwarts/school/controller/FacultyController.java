@@ -50,6 +50,20 @@ public class FacultyController {
     @GetMapping("/{id}/students")
     public List<StudentDtoOut> findStudentsOnFaculty(@PathVariable Long id) {
         return facultyService.findStudentsByFaculty(id);
+    }
 
+    @GetMapping("/getLongestName")
+    public String getLongestName(){
+        return facultyService.getLongestName();
+    }
+
+    @GetMapping("/sum")
+    public Integer sum(){
+        return facultyService.sum();
+    }
+
+    @GetMapping("/sumParallel")
+    public Integer sumParallel(){
+        return facultyService.sumParallel();
     }
 }
