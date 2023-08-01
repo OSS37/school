@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.dto.FacultyDtoIn;
@@ -18,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FacultyService.class);
+
     private final FacultyRepository facultyRepository;
     private final FacultyMapper facultyMapper;
     private final StudentRepository studentRepository;
@@ -32,18 +37,21 @@ public class FacultyService {
     }
 
     public FacultyDtoOut createFaculty(FacultyDtoIn facultyDtoIn) {
+        LOG.info("Was invoked method createFaculty");
         return facultyMapper.toDto(
                 facultyRepository.save(
                         facultyMapper.toEntity(facultyDtoIn)));
     }
 
     public FacultyDtoOut findFaculty(Long id) {
+        LOG.info("Was invoked method findFaculty with id = {}", id);
         return facultyRepository.findById(id)
                 .map(facultyMapper::toDto)
                 .orElseThrow(() -> new FacultyNotFoundException(id));
     }
 
     public FacultyDtoOut editFaculty(long id, FacultyDtoIn facultyDtoIn) {
+        LOG.info("Was invoked method editFaculty with id = {}", id);
         return facultyRepository.findById(id)
                 .map(oldDFaculty -> {
                     oldDFaculty.setColor(facultyDtoIn.getColor());
@@ -54,6 +62,7 @@ public class FacultyService {
     }
 
     public FacultyDtoOut deleteFaculty(Long id) {
+        LOG.info("Was invoked method deleteFaculty with id = {}", id);
         Faculty faculty = facultyRepository.findById(id)
                 .orElseThrow(() -> new FacultyNotFoundException(id));
         facultyRepository.delete(faculty);
@@ -61,6 +70,7 @@ public class FacultyService {
     }
 
     public List<FacultyDtoOut> findAll (@Nullable String color) {
+        LOG.info("Was invoked method findAll");
         return Optional.ofNullable(color)
                 .map(facultyRepository::findAllByColorIgnoreCase)
                 .orElseGet(facultyRepository::findAll).stream()
@@ -69,6 +79,7 @@ public class FacultyService {
             }
 
     public List<FacultyDtoOut> findByColorOrName(String colorOrName) {
+        LOG.info("Was invoked method findByColorOrName");
         return facultyRepository.findByColorContainingIgnoreCaseOrNameContainingIgnoreCase(
                 colorOrName,
                 colorOrName
@@ -78,6 +89,7 @@ public class FacultyService {
     }
 
     public List<StudentDtoOut> findStudentsByFaculty(Long id) {
+        LOG.info("Was invoked method findStudentsByFaculty with id ={}", id);
             return studentRepository.findAllByFaculty_Id(id).stream()
                 .map(studentMapper::toDto)
                 .collect(Collectors.toList());
